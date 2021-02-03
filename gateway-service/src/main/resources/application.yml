@@ -1,0 +1,34 @@
+# Spring Cloud Gateway port
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8083/eureka
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: gateway
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          predicates:
+            - Path=/user/**
+          uri: lb://user-service
+          filters:
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
+        - id: shop-service
+          uri: lb://shop-service
+          predicates:
+            - Path=/shop/**
+          filters:
+            - RewritePath=/shop/(?<segment>.*), /$\{segment}

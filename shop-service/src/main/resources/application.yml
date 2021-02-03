@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: shop-service
+
+server:
+  port: 8082
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8083/eureka
+
+
+
