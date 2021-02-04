@@ -15,5 +15,5 @@ Run following command to build project
 Run the all applications with the following command:
 
 ```
-./gradlew :eureka-service:bootRun :gateway-service:bootRun :shop-service:bootRun :user-service:bootRun --parallel
+./gradlew bootRun --parallel
 ```
