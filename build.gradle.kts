@@ -75,6 +75,7 @@ project(":gateway-service") {
 	dependencies {
 		implementation("org.springframework.cloud:spring-cloud-starter-gateway")
 		implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+		implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 	}
 }
 

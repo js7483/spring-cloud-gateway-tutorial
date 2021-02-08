@@ -17,6 +17,9 @@ management:
         include: gateway
 
 spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
   cloud:
     gateway:
       routes:
@@ -26,6 +29,10 @@ spring:
           uri: lb://user-service
           filters:
             - RewritePath=/user/(?<segment>.*), /$\{segment}
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
         - id: shop-service
           uri: lb://shop-service
           predicates:
