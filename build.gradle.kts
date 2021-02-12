@@ -1,8 +1,12 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
 	id("org.springframework.boot") version "2.4.2"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	kotlin("jvm") version "1.4.21"
 	kotlin("plugin.spring") version "1.4.21"
+	id("com.palantir.docker") version "0.25.0"
+	id("com.palantir.docker-compose") version "0.25.0"
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_11
@@ -30,6 +34,8 @@ subprojects {
 	apply(plugin = "org.springframework.boot")
 	apply(plugin = "io.spring.dependency-management")
 	apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+	apply(plugin = "com.palantir.docker")
+	apply(plugin = "com.palantir.docker-compose")
 
 	extra["springCloudVersion"] = "2020.0.0"
 
@@ -67,6 +73,17 @@ subprojects {
 		test {
 			useJUnitPlatform()
 		}
+
+		dockerComposeDown { enabled = false }
+		dockerComposeUp { enabled = false}
+	}
+
+	docker {
+		val bootJar: BootJar by tasks
+
+		name = project.name
+		files(".container/Dockerfile", "build/libs/${bootJar.archiveFileName.get()}")
+		buildArgs(mapOf("JAR_FILE" to bootJar.archiveFileName.get()))
 	}
 }
 
@@ -77,6 +94,7 @@ project(":gateway-service") {
 		implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 		implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 	}
+
 }
 
 project(":eureka-service") {
@@ -103,4 +121,8 @@ project(":shop-service") {
 tasks.bootJar {enabled = false}
 tasks.jar {enabled = true}
 tasks.bootRun {enabled = false}
+tasks.docker {enabled = false}
 
+dockerCompose {
+	setDockerComposeFile("docker-compose.yml")
+}

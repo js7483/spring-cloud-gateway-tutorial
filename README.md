@@ -8,12 +8,7 @@ To run this project you'll need:
 
 ## Running
 
-Run following command to build project
+Build and run the project using Docker compose with the following command:
 ```
-./gradlew build
-```
-Run the all applications with the following command:
-
-```
-./gradlew bootRun --parallel
+./gradlew assemble docker dockerComposeUp
 ```

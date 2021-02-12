@@ -1,0 +1,30 @@
+version: '3'
+services:
+  eureka:
+    image: 'eureka-service:latest'
+    ports:
+      - 8083:8083
+  user:
+    image: 'user-service:latest'
+    ports:
+      - 8081:8081
+    depends_on:
+      - eureka
+  shop:
+    image: 'shop-service:latest'
+    ports:
+      - 8082:8082
+    depends_on:
+      - eureka
+  redis:
+    image: 'redis'
+    ports:
+      - 6379:6379
+  gateway:
+    image: 'gateway-service:latest'
+    ports:
+      - 8080:8080
+    depends_on:
+      - user
+      - shop
+      - redis
